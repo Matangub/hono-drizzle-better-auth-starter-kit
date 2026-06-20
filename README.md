@@ -60,6 +60,31 @@ Better Auth is configured in `src/auth.ts` and mounted through `src/app.ts`:
 
 Better Auth database schema is generated into `src/db/better-auth-schema.ts`.
 
+### Better Auth plugins used
+
+This starter enables three Better Auth plugins in `src/auth.ts`:
+
+- `organization()`
+	- Adds organization, membership, and invitation capabilities.
+	- Used by this starter for organization-scoped authorization in posts.
+	- Example usage in code: `auth.api.listOrganizations(...)` and `auth.api.getActiveMemberRole(...)` inside `src/modules/auth/auth.service.ts`.
+
+- `admin({ defaultRole })`
+	- Enables admin APIs and global user role behavior.
+	- `defaultRole` is controlled by `BETTER_AUTH_ADMIN_DEFAULT_ROLE`.
+	- Used in tests to validate admin-only API access (`/api/auth/admin/list-users`).
+
+- `apiKey()`
+	- Enables API key management endpoints.
+	- Used in tests through `/api/auth/api-key/create` to create integration keys for authenticated users.
+
+Together these plugins give you:
+
+- user auth + sessions,
+- org-aware permissions,
+- elevated admin operations,
+- machine-to-machine style API key support.
+
 ### Better Auth pnpm commands
 
 ```bash
