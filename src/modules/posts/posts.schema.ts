@@ -29,3 +29,15 @@ export const unauthorizedResponseSchema = z
     message: z.string().openapi({ example: "Unauthorized" }),
   })
   .openapi("UnauthorizedResponse");
+
+export const forbiddenResponseSchema = z
+  .object({
+    message: z.string().openapi({ example: "Forbidden" }),
+  })
+  .openapi("ForbiddenResponse");
+
+export const badRequestResponseSchema = z
+  .object({
+    message: z.string().openapi({ example: "Active organization is required" }),
+  })
+  .openapi("BadRequestResponse");

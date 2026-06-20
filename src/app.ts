@@ -1,8 +1,10 @@
+import { randomUUID } from "node:crypto";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
 import { auth } from "./auth.js";
 import { env } from "./env.js";
+import { logger } from "./logger.js";
 import docsRoutes from "./modules/docs/docs.routes.js";
 import healthRoutes from "./modules/health/health.routes.js";
 import postsRoutes from "./modules/posts/posts.routes.js";
@@ -21,18 +23,31 @@ app.use(
 );
 
 app.use("*", async (c, next) => {
+  const requestId = c.req.header("x-request-id") ?? randomUUID();
+  const startedAt = Date.now();
+
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
-  if (!session) {
+  if (session) {
+    c.set("user", session.user);
+    c.set("session", session.session);
+  } else {
     c.set("user", null);
     c.set("session", null);
-    await next();
-    return;
   }
 
-  c.set("user", session.user);
-  c.set("session", session.session);
   await next();
+
+  const user = c.get("user");
+
+  logger.info({
+    durationMs: Date.now() - startedAt,
+    method: c.req.method,
+    path: c.req.path,
+    requestId,
+    statusCode: c.res.status,
+    userId: user?.id ?? null,
+  });
 });
 
 app.route("/", healthRoutes);

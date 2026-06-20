@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { desc, type InferSelectModel } from "drizzle-orm";
+import { desc, type InferSelectModel, inArray } from "drizzle-orm";
 import { posts } from "../../db/app-schema.js";
 import { db } from "../../db/client.js";
 import type { CreatePostBody, Post } from "./posts.types.js";
@@ -17,13 +17,18 @@ const serializePost = (post: PostRow): Post => ({
 });
 
 export const postsRepo = {
-  createPost: async (input: CreatePostBody, userId: string): Promise<Post> => {
+  createPost: async (
+    input: CreatePostBody,
+    userId: string,
+    organizationId: string
+  ): Promise<Post> => {
     const [post] = await db
       .insert(posts)
       .values({
         content: input.content,
         createdBy: userId,
         id: randomUUID(),
+        organizationId,
         title: input.title,
         updatedBy: userId,
       })
@@ -35,10 +40,17 @@ export const postsRepo = {
 
     return serializePost(post);
   },
-  listPosts: async (): Promise<Post[]> => {
+  listPostsByOrganizations: async (
+    organizationIds: string[]
+  ): Promise<Post[]> => {
+    if (organizationIds.length === 0) {
+      return [];
+    }
+
     const allPosts = await db
       .select()
       .from(posts)
+      .where(inArray(posts.organizationId, organizationIds))
       .orderBy(desc(posts.createdAt));
 
     return allPosts.map(serializePost);
