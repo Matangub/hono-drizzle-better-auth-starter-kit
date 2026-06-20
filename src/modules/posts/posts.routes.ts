@@ -105,7 +105,7 @@ postsRoutes.openapi(listPostsRoute, async (c) => {
   );
 
   const posts = await postsService.listPosts(organizationIds, user.id);
-  return c.json(posts);
+  return c.json(posts, 200);
 });
 
 postsRoutes.openapi(createPostRoute, async (c) => {

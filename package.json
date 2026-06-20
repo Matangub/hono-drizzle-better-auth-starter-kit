@@ -29,6 +29,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "start": "node dist/index.js",
     "db:auth:generate": "pnpm dlx auth@latest generate --config src/auth.ts --output src/db/better-auth-schema.ts --yes",
     "db:auth:migrate": "pnpm dlx auth@latest migrate --config src/auth.ts --yes",

@@ -23,5 +23,13 @@ if [ $FORMAT_EXIT_CODE -ne 0 ]; then
   exit $FORMAT_EXIT_CODE
 fi
 
+echo "Running typecheck..."
+pnpm run typecheck
+
+if [ $? -ne 0 ]; then
+  echo "Typecheck failed."
+  exit 1
+fi
+
 echo "✨ Files formatted by Ultracite"
 # ultracite end
