@@ -1,1 +1,8 @@
-# hono-drizzle-better-auth-starter-kit
+```
+npm install
+npm run dev
+```
+
+```
+open http://localhost:3000
+```
