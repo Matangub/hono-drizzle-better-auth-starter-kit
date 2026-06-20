@@ -32,6 +32,9 @@ importers:
       drizzle-orm:
         specifier: ^0.45.2
         version: 0.45.2(@types/pg@8.20.0)(kysely@0.29.2)(pg@8.22.0)
+      fallow:
+        specifier: ^2.100.0
+        version: 2.100.0
       hono:
         specifier: ^4.12.26
         version: 4.12.26
@@ -695,6 +698,46 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@fallow-cli/darwin-arm64@2.100.0':
+    resolution: {integrity: sha512-QWQc/L19RhohTuW2VlXReVREg9h+2g8j0Y3YyXUiCirimJqEiPgO6insBJ6ZadCWRHnJk/ZQeDUH86M3oYpnbQ==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@fallow-cli/darwin-x64@2.100.0':
+    resolution: {integrity: sha512-NI4CyTHYtteVw099uMWnmK8JuwexbRKJzvMjzotnrpq/lE7Por8WAtfS2QqYn4HPR2xmqszYXn2Sfe9G0rAY/A==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@fallow-cli/linux-arm64-gnu@2.100.0':
+    resolution: {integrity: sha512-ms+MngceYqNCxpTSLm9vZbf+UIEQxllp3FJH7TrfV1OFkJLYEVCNvUsM0nEgGCvA/txVzVJo9480gfnL2zTnrQ==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@fallow-cli/linux-arm64-musl@2.100.0':
+    resolution: {integrity: sha512-IXEahcKf0odDOHbRYCNs4y1VZ8AwLTfzZigMDFc4KCSrkis35NsF3CtUVz1euSjcrt02IHehHeBfz7FpBwOt9g==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@fallow-cli/linux-x64-gnu@2.100.0':
+    resolution: {integrity: sha512-JX0E7TX9SrO106BflCEulKUB6JF+8CIW4VSV/EdMhXaXxNsnEognoqUeFS3n60KzUoYyIIV8WxVu9yZdOe8VjQ==}
+    cpu: [x64]
+    os: [linux]
+
+  '@fallow-cli/linux-x64-musl@2.100.0':
+    resolution: {integrity: sha512-+GUr9l+p2oWWt5s/yRh5zyS/1478UpnGTjamY2LejKNXjQ9lkbbzoenlqbvHSUBWOO8NUyIT1uteFTKwDWsAhQ==}
+    cpu: [x64]
+    os: [linux]
+
+  '@fallow-cli/win32-arm64-msvc@2.100.0':
+    resolution: {integrity: sha512-AxOsW3f9R/f+ZPar6lyeUMjnBZmPftyKqsyiAlgvLDv+qjGYz0ih8/S6grRdeTARD4utkoCfCSXDRWfIfpXJ1g==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@fallow-cli/win32-x64-msvc@2.100.0':
+    resolution: {integrity: sha512-+alnlhbcZPhwuRVTPGhp3Spa0lTvW/ljR71cIXYli4NSNQ7fiWzJMz38d87Y5cZfrbdSD1fSGSYBmcbp8OUCvg==}
+    cpu: [x64]
+    os: [win32]
+
   '@hono/node-server@2.0.5':
     resolution: {integrity: sha512-yQFvDmyDo3y6rEOJZDUYPJ49DIKTPpIk4kGvm40xx4Ejne0Pu9a1+exxPN+C1UppWK/WGZX9F++/Xs231tE86g==}
     engines: {node: '>=20'}
@@ -1160,6 +1203,11 @@ packages:
   expect-type@1.3.0:
     resolution: {integrity: sha512-knvyeauYhqjOYvQ66MznSMs83wmHrCycNEN6Ao+2AeYEfxUIkuiVxdEa1qlGEPK+We3n0THiDciYSsCcgW/DoA==}
     engines: {node: '>=12.0.0'}
+
+  fallow@2.100.0:
+    resolution: {integrity: sha512-xz/paJI8vqhOgd2igfDVnIAHUP4gCcc3s+uGinVXk8Gji+l3G2g8FZA6+/Xu6OPzgbqPbzovPYQ6m+moDTjSRA==}
+    engines: {node: '>=16'}
+    hasBin: true
 
   fast-copy@4.0.3:
     resolution: {integrity: sha512-58apWr0GUiDFM8+3afrO6eYwJBn9ZAhDOzG3L+/9llab/haCARS2UIfffmOurYLwbgDRs8n0rfr6qAAPEAuAQw==}
@@ -2041,6 +2089,30 @@ snapshots:
   '@esbuild/win32-x64@0.28.1':
     optional: true
 
+  '@fallow-cli/darwin-arm64@2.100.0':
+    optional: true
+
+  '@fallow-cli/darwin-x64@2.100.0':
+    optional: true
+
+  '@fallow-cli/linux-arm64-gnu@2.100.0':
+    optional: true
+
+  '@fallow-cli/linux-arm64-musl@2.100.0':
+    optional: true
+
+  '@fallow-cli/linux-x64-gnu@2.100.0':
+    optional: true
+
+  '@fallow-cli/linux-x64-musl@2.100.0':
+    optional: true
+
+  '@fallow-cli/win32-arm64-msvc@2.100.0':
+    optional: true
+
+  '@fallow-cli/win32-x64-msvc@2.100.0':
+    optional: true
+
   '@hono/node-server@2.0.5(hono@4.12.26)':
     dependencies:
       hono: 4.12.26
@@ -2404,6 +2476,19 @@ snapshots:
       '@types/estree': 1.0.9
 
   expect-type@1.3.0: {}
+
+  fallow@2.100.0:
+    dependencies:
+      detect-libc: 2.1.2
+    optionalDependencies:
+      '@fallow-cli/darwin-arm64': 2.100.0
+      '@fallow-cli/darwin-x64': 2.100.0
+      '@fallow-cli/linux-arm64-gnu': 2.100.0
+      '@fallow-cli/linux-arm64-musl': 2.100.0
+      '@fallow-cli/linux-x64-gnu': 2.100.0
+      '@fallow-cli/linux-x64-musl': 2.100.0
+      '@fallow-cli/win32-arm64-msvc': 2.100.0
+      '@fallow-cli/win32-x64-msvc': 2.100.0
 
   fast-copy@4.0.3: {}
 

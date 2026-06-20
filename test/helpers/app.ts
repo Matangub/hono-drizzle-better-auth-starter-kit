@@ -3,7 +3,7 @@ import { env } from "../../src/env.js";
 
 let appPromise: Promise<typeof appType> | null = null;
 
-export const getApp = (): Promise<typeof appType> => {
+const getApp = (): Promise<typeof appType> => {
   if (!appPromise) {
     appPromise = import("../../src/app.ts").then((module) => module.app);
   }
@@ -11,7 +11,7 @@ export const getApp = (): Promise<typeof appType> => {
   return appPromise;
 };
 
-export const createAppRequest = (path: string, init?: RequestInit): Request =>
+const createAppRequest = (path: string, init?: RequestInit): Request =>
   new Request(`${env.BETTER_AUTH_URL}${path}`, init);
 
 export const requestApp = async (

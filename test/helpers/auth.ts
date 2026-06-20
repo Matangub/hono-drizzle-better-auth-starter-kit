@@ -15,7 +15,7 @@ export interface SignedUpUser {
   userId: string;
 }
 
-export const getSessionCookie = (headers: Headers): string => {
+const getSessionCookie = (headers: Headers): string => {
   const cookieHeaders =
     "getSetCookie" in headers
       ? (headers as Headers & { getSetCookie: () => string[] }).getSetCookie()

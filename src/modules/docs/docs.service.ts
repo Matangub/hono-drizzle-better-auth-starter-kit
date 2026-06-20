@@ -88,6 +88,47 @@ const getModulePaths = (): OpenApiPaths => {
   );
 };
 
+const extractOpenApiSpec = (
+  endpointOptions: Record<string, unknown>
+): Record<string, unknown> | null => {
+  const endpointMetadata = isRecord(endpointOptions.metadata)
+    ? endpointOptions.metadata
+    : null;
+
+  const endpointOpenApi = endpointMetadata?.openapi ?? endpointOptions.openapi;
+
+  if (!isRecord(endpointOpenApi) || endpointOpenApi.disabled === true) {
+    return null;
+  }
+
+  return endpointOpenApi;
+};
+
+const buildOperationWithTags = (
+  openApiSpec: Record<string, unknown>
+): OpenApiOperation => ({
+  ...openApiSpec,
+  tags:
+    Array.isArray(openApiSpec.tags) && openApiSpec.tags.length > 0
+      ? openApiSpec.tags
+      : ["better-auth"],
+});
+
+const addEndpointOperation = (
+  paths: OpenApiPaths,
+  endpointPath: string,
+  methods: string[],
+  operation: OpenApiOperation
+): void => {
+  if (!(endpointPath in paths)) {
+    paths[endpointPath] = {};
+  }
+
+  for (const method of methods) {
+    paths[endpointPath][method] = withDefaultResponses(operation);
+  }
+};
+
 const getBetterAuthPaths = async (): Promise<OpenApiPaths> => {
   const authContext = await auth.$context;
   const { api } = getEndpoints(
@@ -108,33 +149,16 @@ const getBetterAuthPaths = async (): Promise<OpenApiPaths> => {
       continue;
     }
 
-    const endpointMetadata = isRecord(endpointOptions.metadata)
-      ? endpointOptions.metadata
-      : null;
-
-    const endpointOpenApi =
-      endpointMetadata?.openapi ?? endpointOptions.openapi;
-
-    if (!isRecord(endpointOpenApi) || endpointOpenApi.disabled === true) {
+    const openApiSpec = extractOpenApiSpec(endpointOptions);
+    if (!openApiSpec) {
       continue;
     }
 
     const endpointPath = `/api/auth${normalizePath(endpoint.path)}`;
     const methods = normalizeMethods(endpointOptions.method);
+    const operation = buildOperationWithTags(openApiSpec);
 
-    if (!(endpointPath in paths)) {
-      paths[endpointPath] = {};
-    }
-
-    for (const method of methods) {
-      paths[endpointPath][method] = withDefaultResponses({
-        ...endpointOpenApi,
-        tags:
-          Array.isArray(endpointOpenApi.tags) && endpointOpenApi.tags.length > 0
-            ? endpointOpenApi.tags
-            : ["better-auth"],
-      });
-    }
+    addEndpointOperation(paths, endpointPath, methods, operation);
   }
 
   return paths;

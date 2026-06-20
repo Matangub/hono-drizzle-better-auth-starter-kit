@@ -10,6 +10,8 @@ const pool = new Pool({
 
 export const db = drizzle(pool);
 
+// Exported for graceful database shutdown in server teardown
+// fallow-ignore-next-line unused-export
 export const closeDatabase = async (): Promise<void> => {
   await pool.end();
 };
