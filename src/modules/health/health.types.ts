@@ -1,9 +1,9 @@
-import type { infer as Infer } from "zod";
+import type { z } from "@hono/zod-openapi";
 
 import type {
   healthResponseSchema,
   rootResponseSchema,
 } from "./health.schema.js";
 
-export type HealthResponse = Infer<typeof healthResponseSchema>;
-export type RootResponse = Infer<typeof rootResponseSchema>;
+export type HealthResponse = z.infer<typeof healthResponseSchema>;
+export type RootResponse = z.infer<typeof rootResponseSchema>;

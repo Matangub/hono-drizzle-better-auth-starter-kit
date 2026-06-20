@@ -5,6 +5,7 @@ import { auth } from "./auth.js";
 import { env } from "./env.js";
 import docsRoutes from "./modules/docs/docs.routes.js";
 import healthRoutes from "./modules/health/health.routes.js";
+import postsRoutes from "./modules/posts/posts.routes.js";
 import type { AppVariables } from "./types/app-context.js";
 
 export const app = new Hono<{ Variables: AppVariables }>();
@@ -36,6 +37,7 @@ app.use("*", async (c, next) => {
 
 app.route("/", healthRoutes);
 app.route("/", docsRoutes);
+app.route("/posts", postsRoutes);
 
 app.on(["GET", "POST"], "/api/auth/*", (c) => auth.handler(c.req.raw));
 

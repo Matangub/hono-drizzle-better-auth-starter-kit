@@ -199,4 +199,75 @@ describe("auth e2e", () => {
     expect(organizationBody.id).toBeTruthy();
     expect(organizationBody.slug).toBe(`org-${suffix}`);
   });
+
+  it("lets an authenticated user create and list posts", async () => {
+    const { app } = await import("../src/app.ts");
+    const suffix = randomUUID();
+    const email = `post-${suffix}@example.com`;
+    const password = "Password123!";
+    const name = "Post User";
+
+    const signUpResponse = await app.fetch(
+      new Request(`${env.BETTER_AUTH_URL}/api/auth/sign-up/email`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          name,
+          password,
+        }),
+      })
+    );
+
+    expect(signUpResponse.ok).toBe(true);
+    const sessionCookie = getSessionCookie(signUpResponse.headers);
+
+    const createPostResponse = await app.fetch(
+      new Request(`${env.BETTER_AUTH_URL}/posts`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          cookie: sessionCookie,
+        },
+        body: JSON.stringify({
+          content: "This is a test post.",
+          title: `Post ${suffix}`,
+        }),
+      })
+    );
+
+    expect(createPostResponse.ok).toBe(true);
+
+    const createdPost = (await createPostResponse.json()) as {
+      createdBy?: string | null;
+      id?: string;
+      title?: string;
+    };
+
+    expect(createdPost.id).toBeTruthy();
+    expect(createdPost.title).toBe(`Post ${suffix}`);
+    expect(createdPost.createdBy).toBeTruthy();
+
+    const listPostsResponse = await app.fetch(
+      new Request(`${env.BETTER_AUTH_URL}/posts`, {
+        headers: {
+          cookie: sessionCookie,
+        },
+      })
+    );
+
+    expect(listPostsResponse.ok).toBe(true);
+
+    const postsBody = (await listPostsResponse.json()) as Array<{
+      id: string;
+      title: string;
+    }>;
+
+    expect(postsBody.some((post) => post.id === createdPost.id)).toBe(true);
+    expect(postsBody.some((post) => post.title === `Post ${suffix}`)).toBe(
+      true
+    );
+  });
 });

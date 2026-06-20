@@ -1,10 +1,40 @@
-import { Hono } from "hono";
+import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
+import { healthResponseSchema, rootResponseSchema } from "./health.schema.js";
+import { healthService } from "./health.service.js";
 
-import { healthController } from "./health.controller.js";
+const healthRoutes = new OpenAPIHono();
 
-const healthRoutes = new Hono();
+const rootRoute = createRoute({
+  method: "get",
+  path: "/",
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: rootResponseSchema,
+        },
+      },
+      description: "Root endpoint",
+    },
+  },
+});
 
-healthRoutes.get("/", healthController.getRoot);
-healthRoutes.get("/health", healthController.getHealth);
+const healthRoute = createRoute({
+  method: "get",
+  path: "/health",
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: healthResponseSchema,
+        },
+      },
+      description: "Health check response",
+    },
+  },
+});
+
+healthRoutes.openapi(rootRoute, (c) => c.json(healthService.getRoot()));
+healthRoutes.openapi(healthRoute, (c) => c.json(healthService.getHealth()));
 
 export default healthRoutes;
