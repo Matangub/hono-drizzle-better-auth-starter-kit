@@ -36,6 +36,12 @@
     "db:push": "drizzle-kit push",
     "check": "ultracite check",
     "fix": "ultracite fix",
+    "infra:up": "docker compose up -d",
+    "infra:down": "docker compose down",
+    "infra:logs": "docker compose logs -f",
+    "infra:ps": "docker compose ps",
+    "infra:build": "docker compose build",
+    "infra:restart": "docker compose restart",
     "test": "vitest run",
     "test:e2e": "vitest run test/auth.e2e.test.ts test/posts.e2e.test.ts",
     "prepare": "husky"
