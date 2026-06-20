@@ -3,6 +3,7 @@
     "@better-auth/api-key": "^1.6.20",
     "@better-auth/drizzle-adapter": "^1.6.20",
     "@hono/node-server": "^2.0.5",
+    "@scalar/hono-api-reference": "^0.11.4",
     "better-auth": "^1.6.20",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",

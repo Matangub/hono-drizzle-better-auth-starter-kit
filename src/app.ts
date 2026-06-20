@@ -3,23 +3,11 @@ import { cors } from "hono/cors";
 
 import { auth } from "./auth.js";
 import { env } from "./env.js";
+import docsRoutes from "./modules/docs/docs.routes.js";
+import healthRoutes from "./modules/health/health.routes.js";
+import type { AppVariables } from "./types/app-context.js";
 
-type SessionUser = typeof auth.$Infer.Session.user;
-type SessionData = typeof auth.$Infer.Session.session;
-
-type AppBindings = Record<string, never>;
-
-interface AppVariables {
-  readonly session: SessionData | null;
-  readonly user: SessionUser | null;
-}
-
-const authOrigin = new URL(env.BETTER_AUTH_URL).origin;
-
-export const app = new Hono<{
-  Bindings: AppBindings;
-  Variables: AppVariables;
-}>();
+export const app = new Hono<{ Variables: AppVariables }>();
 
 app.use(
   "/api/auth/*",
@@ -27,7 +15,7 @@ app.use(
     allowHeaders: ["Content-Type", "Authorization"],
     allowMethods: ["GET", "OPTIONS", "POST"],
     credentials: true,
-    origin: authOrigin,
+    origin: new URL(env.BETTER_AUTH_URL).origin,
   })
 );
 
@@ -46,15 +34,16 @@ app.use("*", async (c, next) => {
   await next();
 });
 
-app.on(["GET", "POST"], "/api/auth/*", (c) => auth.handler(c.req.raw));
+app.route("/", healthRoutes);
+app.route("/", docsRoutes);
 
-app.get("/", (c) => c.text("Hello Hono!"));
+app.on(["GET", "POST"], "/api/auth/*", (c) => auth.handler(c.req.raw));
 
 app.get("/session", (c) => {
   const user = c.get("user");
   const session = c.get("session");
 
-  if (!user) {
+  if (!(user && session)) {
     return c.body(null, 401);
   }
 
